@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +30,25 @@ public class MedicineController {
 
     @PostMapping
     public ResponseEntity<Medicine> create(@RequestBody Medicine medicine){
+        if (medicineRepository.findById(medicine.getId()).isPresent()) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
         return ResponseEntity.ok(medicineRepository.save(medicine));
+    }
+
+    @PutMapping("/{id:[\\d]+}")
+    public ResponseEntity<Medicine> update(@PathVariable Long id, @RequestBody Medicine medicine){
+        return medicineRepository.findById(id)
+                .map(m -> m.getId() == medicine.getId() ?
+                        medicineRepository.save(medicine) :
+                        medicineRepository.save(m))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id:[\\d]+}")
+    public ResponseEntity<Medicine> deleteById(@PathVariable Long id){
+        medicineRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
