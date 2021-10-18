@@ -37,7 +37,6 @@ public class PharmacyController {
 
     @PutMapping("/{id:[\\d]+}")
     public ResponseEntity<Pharmacy> update(@PathVariable Long id, @RequestBody Pharmacy pharmacy) {
-        //FIXME dont work with 0 id
         return pharmacyRepository.findById(id)
                 .map(ph -> ph.getId() == pharmacy.getId() ?
                         pharmacyRepository.save(pharmacy) :
@@ -48,7 +47,6 @@ public class PharmacyController {
 
     @DeleteMapping("/{id:[\\d]+}")
     public ResponseEntity<Pharmacy> deleteById(@PathVariable Long id) {
-        //FIXME dont work with 0 id
         pharmacyRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
