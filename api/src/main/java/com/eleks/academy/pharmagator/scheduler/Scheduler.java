@@ -8,6 +8,7 @@ import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,8 @@ public class Scheduler {
     private final MedicineRepository medicineRepository;
     private final PriceRepository priceRepository;
 
+    private final ModelMapper modelMapper;
+
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
@@ -29,18 +32,10 @@ public class Scheduler {
     }
 
     private void storeToDatabase(MedicineDto dto) {
-        medicineRepository.save(
-                new Medicine(
-                        Long.parseLong(dto.getExternalId()),
-                        dto.getTitle()
-                ));
-        priceRepository.save(
-                new Price(
-                        1,
-                        Long.parseLong(dto.getExternalId()),
-                        dto.getPrice(),
-                        "localhost",
-                        Instant.now()
-                ));
+        Price price = modelMapper.map(dto, Price.class);
+        price.setPharmacyId(1);
+        price.setUpdatedAt(Instant.now());
+        medicineRepository.save(modelMapper.map(dto, Medicine.class));
+        priceRepository.save(price);
     }
 }
