@@ -8,11 +8,13 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
-public class DataProviderImpl implements DataProvider {
+public class DummyProviderImpl implements DataProvider {
     @Override
     public Stream<MedicineDto> loadData() {
-        return IntStream.rangeClosed(1, 100)
+        // return
+        IntStream.rangeClosed(1, 100)
                 .mapToObj(this::buildDto);
+        return null;
     }
 
     private MedicineDto buildDto(int i) {

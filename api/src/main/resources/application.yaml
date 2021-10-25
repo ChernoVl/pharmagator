@@ -6,3 +6,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+pharmagator:
+  data-providers:
+    apteka-ants:
+      url: https://anc.ua/productbrowser/v2/ua
+      category-fetch-url: /categories
