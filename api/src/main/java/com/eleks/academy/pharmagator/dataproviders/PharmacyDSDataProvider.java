@@ -1,12 +1,22 @@
 package com.eleks.academy.pharmagator.dataproviders;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.MedicineDto;
+import com.eleks.academy.pharmagator.dataproviders.dto.ds.CategoryDto;
+import com.eleks.academy.pharmagator.dataproviders.dto.ds.DSMedicineDto;
+import com.eleks.academy.pharmagator.dataproviders.dto.ds.DSMedicinesResponse;
+import com.eleks.academy.pharmagator.dataproviders.dto.ds.FilterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -17,17 +27,129 @@ public class PharmacyDSDataProvider implements DataProvider {
 
     private final WebClient dsClient;
 
+    @Value("${pharmagator.data-providers.apteka-ds.category-fetch-url}")
+    private String categoriesFetchUrl;
+
+    @Value("${pharmagator.data-providers.apteka-ds.category-path}")
+    private String categoryPath;
+
     @Override
     public Stream<MedicineDto> loadData() {
-        return IntStream.rangeClosed(1, 100)
-                .mapToObj(this::buildDto);
+//        return this.fetchCategories().stream()
+//                .filter(categoryDto -> categoryDto.getName().equals("Медикаменти"))
+//                .map(CategoryDto::getChildren)
+//                .flatMap(Collection::stream)
+//                .map(CategoryDto::getSlug)
+//                .flatMap(this::fetchMedicinesByCategory);
+        return this.fetchCategories().stream()
+                .filter(categoryDto -> categoryDto.getName().equals("Медикаменти"))
+                //.map(categoryDto -> categoryDto.getChildren())//преобразовываем Stream<CategoryDto> в Stream<List<CategoryDto>>
+                //.flatMap(podCategoryDto -> podCategoryDto.stream())//"разворачиваем" Stream<List<podCategoryDto>> в Stream<podCategoryDto>
+                //instead of map + flatmap
+                .flatMap(categoryDto -> categoryDto.getChildren().stream())
+                .map(categoryDto -> categoryDto.getSlug())
+                .flatMap(x -> fetchMedicinesByCategory(x));
     }
 
-    private MedicineDto buildDto(int i) {
+    private List<CategoryDto> fetchCategories() {
+        return dsClient
+                .get()
+                .uri(categoriesFetchUrl)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<CategoryDto>>() {
+                })
+                .block();
+    }
+
+    private Stream<MedicineDto> fetchMedicinesByCategory(String category) {
+
+//        Long pageSize = 100L;
+//
+//        FilterRequest filterRequest = FilterRequest.builder()
+//                .page(1L)
+//                .per(100L)
+//                .build();
+//
+//        DSMedicinesResponse dsMedicinesResponse = this.dsClient.post()
+//                .uri(categoryPath + "/" + category)
+//                .body(Mono.just(filterRequest), FilterRequest.class)
+//                .retrieve()
+//                .bodyToMono(DSMedicinesResponse.class)
+//                .block();
+//
+//        Long total;
+//        if (dsMedicinesResponse != null) {
+//            total = dsMedicinesResponse.getTotal();
+//            long pageCount = total / pageSize;
+//
+//            List<DSMedicinesResponse> responseList = new ArrayList<>();
+//            long page = 1L;
+//            while (page <= pageCount) {
+//                DSMedicinesResponse medicinesResponse = this.dsClient.post()
+//                        .uri(categoryPath + "/" + category)
+//                        .body(Mono.just(FilterRequest.builder()
+//                                .page(page)
+//                                .per(pageSize)
+//                                .build()), FilterRequest.class)
+//                        .retrieve()
+//                        .bodyToMono(DSMedicinesResponse.class)
+//                        .block();
+//                responseList.add(medicinesResponse);
+//                page++;
+//            }
+//            return responseList.stream().map(DSMedicinesResponse::getProducts)
+//                    .flatMap(Collection::stream)
+//                    .map(this::mapToMedicineDto);
+//        }
+//        return Stream.of();
+
+        Long pageSize = 100L;
+
+        FilterRequest filterRequest = FilterRequest.builder()
+                .page(1L)
+                .per(100L)
+                .build();
+
+        DSMedicinesResponse dsMedicinesResponse = this.dsClient
+                .post()
+                .uri(categoryPath + "/" + category)
+                .body(Mono.just(filterRequest), FilterRequest.class)
+                .retrieve()
+                .bodyToMono(DSMedicinesResponse.class)
+                .block();
+
+        Long total = dsMedicinesResponse.getTotal();
+        Long pageCount = total / pageSize;
+
+        List<DSMedicinesResponse> responseList = new ArrayList<>();
+        Long page = 1L;
+        while (page <= pageCount) {
+            DSMedicinesResponse medicinesResponse = this.dsClient
+                    .post()
+                    .uri(categoryPath + "/" + category)
+                    .body(Mono.just(FilterRequest.builder()
+                            .page(page)
+                            .per(pageSize)
+                            .build()), FilterRequest.class)
+                    .retrieve()
+                    .bodyToMono(DSMedicinesResponse.class)
+                    .block();
+            responseList.add(medicinesResponse);
+            page++;
+        }
+
+        return responseList.stream()
+                .map(DSMedicinesResponse::getProducts)
+                .flatMap(Collection::stream)
+                .map(this::mapToMedicineDto);
+    }
+
+    private MedicineDto mapToMedicineDto(DSMedicineDto dsMedicineDto) {
         return MedicineDto.builder()
-                .externalId(String.valueOf(i))
-                .title("title " + i)
-                .price(BigDecimal.valueOf(Math.random()))
+                .externalId(dsMedicineDto.getId())
+                .price(dsMedicineDto.getPrice())
+                .title(dsMedicineDto.getName())
                 .build();
     }
+
 }

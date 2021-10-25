@@ -20,23 +20,27 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
-    private final List<DataProvider> dataProviderList;
     private final MedicineRepository medicineRepository;
     private final PriceRepository priceRepository;
+
+    private final List<DataProvider> dataProviderList;
 
     private final ModelMapper modelMapper;
 
     @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
-        dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
+        dataProviderList.stream()
+                .flatMap(DataProvider::loadData)
+                .forEach(this::storeToDatabase);
     }
 
     private void storeToDatabase(MedicineDto dto) {
-        Price price = modelMapper.map(dto, Price.class);
-        price.setPharmacyId(1);
-        price.setUpdatedAt(Instant.now());
-        medicineRepository.save(modelMapper.map(dto, Medicine.class));
-        priceRepository.save(price);
+//        Price price = modelMapper.map(dto, Price.class);
+//        price.setPharmacyId(1);
+//        price.setUpdatedAt(Instant.now());
+//        medicineRepository.save(modelMapper.map(dto, Medicine.class));
+//        priceRepository.save(price);
+        log.info(dto.getTitle() + " " + dto.getPrice());
     }
 }
