@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class PharmagatorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PharmagatorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PharmagatorApplication.class, args);
+    }
 
 }

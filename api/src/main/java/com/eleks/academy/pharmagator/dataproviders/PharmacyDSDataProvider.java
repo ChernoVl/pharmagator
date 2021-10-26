@@ -20,13 +20,9 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-// каже спрінгу що цей бін має конкретне імя, і по цьому імені можна до нього звертатись
-// І ми маємо теж позначити Кваліфаєром цей бін який конкретно ми хочемо, або використати список провайдерів
 @Qualifier("pharmacyDSDataProvider")
 public class PharmacyDSDataProvider implements DataProvider {
 
-    //В нас буде конструкор з цим полем и Спринг сюда нам заинжектыть наш бин, якшо його знайде
-    // А знайде вын його в класы DataProviderConfig
     private final WebClient dsClient;
 
     @Value("${pharmagator.data-providers.apteka-ds.category-fetch-url}")
@@ -41,8 +37,6 @@ public class PharmacyDSDataProvider implements DataProvider {
                 .filter(categoryDto -> categoryDto.getName().equals("Медикаменти"))
                 .flatMap(categoryDto -> categoryDto.getChildren().stream())
                 .flatMap(categoryDto -> fetchMedicinesByCategory(categoryDto.getSlug()));
-                //.map(CategoryDto::getSlug)
-                //.flatMap(this::fetchMedicinesByCategory);
     }
 
     private List<CategoryDto> fetchCategories() {
@@ -71,7 +65,7 @@ public class PharmacyDSDataProvider implements DataProvider {
         Long total = dsMedicineResponse.getTotal();
         Long pageCount = total / pageSize;
 
-        if(dsMedicineResponse !=null) {
+        if (dsMedicineResponse != null) {
             List<DSMedicineResponse> dsMedicineResponseList = new ArrayList<>();
             while (page <= pageCount) {
                 dsMedicineResponseList.add(

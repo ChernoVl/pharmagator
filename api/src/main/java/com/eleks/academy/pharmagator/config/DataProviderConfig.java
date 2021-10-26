@@ -16,7 +16,7 @@ public class DataProviderConfig {
     private String pharmacyDSBaserUrl;
 
     @Bean(name = "pharmacyDSWebClient")
-    public WebClient pharmacyDSWebClient(){
+    public WebClient pharmacyDSWebClient() {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)

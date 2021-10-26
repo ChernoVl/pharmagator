@@ -17,19 +17,19 @@ public class MedicineController {
     private final MedicineRepository medicineRepository;
 
     @GetMapping
-    public ResponseEntity<List<Medicine>> getAll(){
+    public ResponseEntity<List<Medicine>> getAll() {
         return ResponseEntity.ok(medicineRepository.findAll());
     }
 
     @GetMapping("/{id:[\\d]+}")
-    public ResponseEntity<Medicine> getById(@PathVariable Long id){
+    public ResponseEntity<Medicine> getById(@PathVariable Long id) {
         return medicineRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Medicine> create(@RequestBody Medicine medicine){
+    public ResponseEntity<Medicine> create(@RequestBody Medicine medicine) {
         if (medicineRepository.findById(medicine.getId()).isPresent()) {
             return ResponseEntity.unprocessableEntity().build();
         }
@@ -37,7 +37,7 @@ public class MedicineController {
     }
 
     @PutMapping("/{id:[\\d]+}")
-    public ResponseEntity<Medicine> update(@PathVariable Long id, @RequestBody Medicine medicine){
+    public ResponseEntity<Medicine> update(@PathVariable Long id, @RequestBody Medicine medicine) {
         return medicineRepository.findById(id)
                 .map(m -> m.getId() == medicine.getId() ?
                         medicineRepository.save(medicine) :
@@ -47,7 +47,7 @@ public class MedicineController {
     }
 
     @DeleteMapping("/{id:[\\d]+}")
-    public ResponseEntity<Medicine> deleteById(@PathVariable Long id){
+    public ResponseEntity<Medicine> deleteById(@PathVariable Long id) {
         medicineRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
