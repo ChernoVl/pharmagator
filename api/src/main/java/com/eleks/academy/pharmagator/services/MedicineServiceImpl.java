@@ -1,5 +1,6 @@
 package com.eleks.academy.pharmagator.services;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.MedicineDto;
 import com.eleks.academy.pharmagator.entities.Medicine;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,16 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     @Override
-    public Medicine save(Medicine medicine) {
-        Medicine m = modelMapper.map(medicine, Medicine.class);
-        return medicineRepository.save(m);
+    public Medicine save(MedicineDto medicineDto) {
+        Medicine medicine = modelMapper.map(medicineDto, Medicine.class);
+        return medicineRepository.save(medicine);
     }
 
     @Override
-    public Optional<Medicine> update(Long id, Medicine medicine) {
+    public Optional<Medicine> update(Long id, MedicineDto medicineDto) {
         return medicineRepository.findById(id)
                 .map(source -> {
-                    Medicine m = modelMapper.map(medicine, Medicine.class);
+                    Medicine m = modelMapper.map(medicineDto, Medicine.class);
                     m.setId(id);
                     medicineRepository.save(m);
                     return m;

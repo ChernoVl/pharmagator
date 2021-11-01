@@ -1,6 +1,6 @@
 package com.eleks.academy.pharmagator.controllers;
 
-import com.eleks.academy.pharmagator.dataproviders.dto.MedicineDto;
+import com.eleks.academy.pharmagator.dataproviders.dto.input.MedicineDto;
 import com.eleks.academy.pharmagator.entities.Medicine;
 import com.eleks.academy.pharmagator.services.MedicineService;
 import lombok.RequiredArgsConstructor;
@@ -30,17 +30,17 @@ public class MedicineController {
     }
 
     @PostMapping
-    public Medicine create(@Valid @RequestBody Medicine medicine) {
-        return this.medicineService.save(medicine);
+    public Medicine create(@Valid @RequestBody MedicineDto medicineDto) {
+        return this.medicineService.save(medicineDto);
 
     }
 
     @PutMapping("/{id:[\\d]+}")
     public ResponseEntity<Medicine> update(
             @PathVariable Long id,
-            @Valid @RequestBody Medicine medicine) {
+            @Valid @RequestBody MedicineDto medicineDto) {
 
-        return this.medicineService.update(id, medicine)
+        return this.medicineService.update(id, medicineDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
 

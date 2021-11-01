@@ -1,7 +1,6 @@
 package com.eleks.academy.pharmagator.services;
 
-import com.eleks.academy.pharmagator.entities.Medicine;
-import com.eleks.academy.pharmagator.entities.Pharmacy;
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
 import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.entities.PriceId;
 import com.eleks.academy.pharmagator.repositories.MedicineRepository;
@@ -9,14 +8,10 @@ import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import com.eleks.academy.pharmagator.repositories.PriceRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -40,18 +35,18 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public Price save(Price price) {
-        Price p = modelMapper.map(price, Price.class);
+    public Price save(PriceDto priceDto) {
+        Price p = modelMapper.map(priceDto, Price.class);
         return priceRepository.save(p);
     }
 
     @Override
-    public Optional<Price> update(Long pharmacyId, Long medicineId, Price price) {
+    public Optional<Price> update(Long pharmacyId, Long medicineId, PriceDto priceDto) {
         PriceId priceId = new PriceId(pharmacyId, medicineId);
 
         return this.priceRepository.findById(priceId)
                 .map(pr -> {
-                    Price p = modelMapper.map(price, Price.class);
+                    Price p = modelMapper.map(priceDto, Price.class);
                     p.setPharmacyId(pharmacyId);
                     p.setMedicineId(medicineId);
                     priceRepository.save(p);

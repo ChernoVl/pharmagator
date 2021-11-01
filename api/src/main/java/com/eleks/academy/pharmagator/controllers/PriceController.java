@@ -1,5 +1,6 @@
 package com.eleks.academy.pharmagator.controllers;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
 import com.eleks.academy.pharmagator.entities.Medicine;
 import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.services.PriceService;
@@ -34,18 +35,18 @@ public class PriceController {
     }
 
     @PostMapping
-    public Price create(@Valid @RequestBody Price price) {
-        return this.priceService.save(price);
+    public Price create(@Valid @RequestBody PriceDto priceDto) {
+        return this.priceService.save(priceDto);
 
     }
 
     @PostMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
     public ResponseEntity<Price> update(
-            @Valid @RequestBody Price price,
+            @Valid @RequestBody PriceDto priceDto,
             @PathVariable Long pharmacyId,
             @PathVariable Long medicineId) {
 
-        return this.priceService.update(pharmacyId, medicineId, price)
+        return this.priceService.update(pharmacyId, medicineId, priceDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

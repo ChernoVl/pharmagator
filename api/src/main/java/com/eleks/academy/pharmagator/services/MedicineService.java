@@ -1,5 +1,6 @@
 package com.eleks.academy.pharmagator.services;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.MedicineDto;
 import com.eleks.academy.pharmagator.entities.Medicine;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface MedicineService {
 
     Optional<Medicine> findById(Long id);
 
-    Medicine save(Medicine medicine);
+    Medicine save(MedicineDto medicineDto);
 
-    Optional<Medicine> update(Long id, Medicine medicine);
+    Optional<Medicine> update(Long id, MedicineDto medicineDto);
 
     void deleteById(Long id);
 }

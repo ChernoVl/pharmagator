@@ -1,7 +1,7 @@
 package com.eleks.academy.pharmagator.services;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PharmacyDto;
 import com.eleks.academy.pharmagator.entities.Pharmacy;
-import com.eleks.academy.pharmagator.repositories.MedicineRepository;
 import com.eleks.academy.pharmagator.repositories.PharmacyRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,16 +29,16 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public Pharmacy save(Pharmacy pharmacy) {
-        Pharmacy p = modelMapper.map(pharmacy, Pharmacy.class);
+    public Pharmacy save(PharmacyDto pharmacyDto) {
+        Pharmacy p = modelMapper.map(pharmacyDto, Pharmacy.class);
         return pharmacyRepository.save(p);
     }
 
     @Override
-    public Optional<Pharmacy> update(Long id, Pharmacy pharmacyInput) {
+    public Optional<Pharmacy> update(Long id, PharmacyDto pharmacyDto) {
         return pharmacyRepository.findById(id)
                 .map(ph ->{
-                    Pharmacy pharmacy = modelMapper.map(pharmacyInput, Pharmacy.class);
+                    Pharmacy pharmacy = modelMapper.map(pharmacyDto, Pharmacy.class);
                     pharmacy.setId(id);
                     pharmacyRepository.save(pharmacy);
                     return pharmacy;

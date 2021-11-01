@@ -1,7 +1,7 @@
 package com.eleks.academy.pharmagator.controllers;
 
+import com.eleks.academy.pharmagator.dataproviders.dto.input.PharmacyDto;
 import com.eleks.academy.pharmagator.entities.Pharmacy;
-import com.eleks.academy.pharmagator.projections.PharmacyLight;
 import com.eleks.academy.pharmagator.services.PharmacyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,16 +32,16 @@ public class PharmacyController {
 
     @PostMapping
     public ResponseEntity<Pharmacy> create(
-            @Valid @RequestBody Pharmacy pharmacy) {
-        return ResponseEntity.ok(this.pharmacyService.save(pharmacy));
+            @Valid @RequestBody PharmacyDto pharmacyDto) {
+        return ResponseEntity.ok(this.pharmacyService.save(pharmacyDto));
     }
 
     @PutMapping("/{id:[\\d]+}")
     public ResponseEntity<Pharmacy> update(
             @PathVariable Long id,
-            @Valid @RequestBody Pharmacy pharmacy) {
+            @Valid @RequestBody PharmacyDto pharmacyDto) {
 
-        return this.pharmacyService.update(id, pharmacy)
+        return this.pharmacyService.update(id, pharmacyDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
