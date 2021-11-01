@@ -1,22 +1,23 @@
 package com.eleks.academy.pharmagator.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Data
 @Entity
-@Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "prices")
 @IdClass(PriceId.class)
 public class Price {
     @Id
-    private long pharmacyId;
+    private Long pharmacyId;
     @Id
-    private long medicineId;
+    private Long medicineId;
     private BigDecimal price;
     private String externalId;
     @Column(insertable = false, updatable = false)
