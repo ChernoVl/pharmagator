@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/pharmacies")
+@RequestMapping("/pharmaciess")
 public class PharmacyController {
 
     private final PharmacyRepository pharmacyRepository;
