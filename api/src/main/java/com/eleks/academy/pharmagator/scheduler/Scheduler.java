@@ -20,7 +20,7 @@ public class Scheduler {
 
     private final List<DataProvider> dataProviderList;
 
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+    //@Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void schedule() {
         log.info("Scheduler started at {}", Instant.now());
         dataProviderList.stream().flatMap(DataProvider::loadData).forEach(this::storeToDatabase);
