@@ -22,5 +22,16 @@ public class DataProvidersConfig {
                 .build();
     }
 
+    @Value("${pharmagator.data-providers.apteka-ants.url}")
+    private String pharmacyANTSBaseUrl;
+
+    @Bean(name = "pharmacyANTSWebClient")
+    public WebClient pharmacyANTSWebClient() {
+        return WebClient.builder()
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .baseUrl(pharmacyANTSBaseUrl)
+                .build();
+    }
 
 }
