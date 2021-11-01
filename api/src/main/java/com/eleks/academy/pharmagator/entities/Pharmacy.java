@@ -1,19 +1,21 @@
 package com.eleks.academy.pharmagator.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+@Data
 @Entity
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "pharmacies")
 public class Pharmacy {
     @Id
-    private long id;
+    // FIXME додати всі ентетям цю анотацію
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    // GenerationType.IDENTITY означає що ми віддаємо генерацю цього поля ІД передаємо на рівень бд
+    private Long id;
+    @Column(nullable = false)
     private String name;
     private String medicineLinkTemplate;
 }

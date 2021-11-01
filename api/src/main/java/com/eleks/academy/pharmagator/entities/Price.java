@@ -9,8 +9,8 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "prices")
