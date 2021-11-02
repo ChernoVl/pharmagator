@@ -24,7 +24,7 @@ public class PriceController {
         return this.priceService.findAll();
     }
 
-    @GetMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @GetMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<Price> getById(
             @PathVariable Long pharmacyId,
             @PathVariable Long medicineId) {
@@ -39,7 +39,7 @@ public class PriceController {
         return this.priceService.save(priceDto);
     }
 
-    @PostMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @PostMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<Price> update(
             @Valid @RequestBody PriceDto priceDto,
             @PathVariable Long pharmacyId,
@@ -50,7 +50,7 @@ public class PriceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @DeleteMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<?> delete(
             @PathVariable Long pharmacyId,
             @PathVariable Long medicineId) {
