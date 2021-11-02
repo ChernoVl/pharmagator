@@ -46,7 +46,7 @@ public class MedicineController {
 
     @DeleteMapping("/{id:[\\d]+}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        this.medicineService.deleteById(id);
+        this.medicineService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

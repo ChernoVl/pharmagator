@@ -43,8 +43,7 @@ public class MedicineServiceImpl implements MedicineService {
                 });
     }
 
-    @Override
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         medicineRepository.deleteById(id);
     }
 

@@ -16,6 +16,6 @@ public interface MedicineService {
 
     Optional<Medicine> update(Long id, MedicineDto medicineDto);
 
-    void deleteById(Long id);
+    void delete(Long id);
 
 }
