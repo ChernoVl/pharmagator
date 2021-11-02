@@ -39,8 +39,7 @@ public class PharmacyServiceImpl implements PharmacyService {
                 .map(ph ->{
                     Pharmacy pharmacy = modelMapper.map(pharmacyDto, Pharmacy.class);
                     pharmacy.setId(id);
-                    pharmacyRepository.save(pharmacy);
-                    return pharmacy;
+                    return pharmacyRepository.save(pharmacy);
                 });
     }
 

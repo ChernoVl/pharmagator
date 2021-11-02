@@ -50,8 +50,7 @@ public class PriceServiceImpl implements PriceService {
                     Price p = modelMapper.map(priceDto, Price.class);
                     p.setPharmacyId(pharmacyId);
                     p.setMedicineId(medicineId);
-                    priceRepository.save(p);
-                    return p;
+                    return priceRepository.save(p);
                 });
     }
 
