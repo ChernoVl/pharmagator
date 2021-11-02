@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/medicines")
 @RequiredArgsConstructor
 public class MedicineController {
+
     private final MedicineService medicineService;
 
     @GetMapping
@@ -26,13 +27,11 @@ public class MedicineController {
         return this.medicineService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @PostMapping
     public Medicine create(@Valid @RequestBody MedicineDto medicineDto) {
         return this.medicineService.save(medicineDto);
-
     }
 
     @PutMapping("/{id:[\\d]+}")
@@ -43,7 +42,6 @@ public class MedicineController {
         return this.medicineService.update(id, medicineDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{id:[\\d]+}")

@@ -15,7 +15,6 @@ import java.util.Optional;
 public class PharmacyServiceImpl implements PharmacyService {
 
     private final PharmacyRepository pharmacyRepository;
-
     private final ModelMapper modelMapper;
 
     @Override
@@ -49,4 +48,5 @@ public class PharmacyServiceImpl implements PharmacyService {
     public void deleteById(Long id) {
         pharmacyRepository.deleteById(id);
     }
+
 }

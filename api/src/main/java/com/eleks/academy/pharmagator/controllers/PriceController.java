@@ -37,7 +37,6 @@ public class PriceController {
     @PostMapping
     public Price create(@Valid @RequestBody PriceDto priceDto) {
         return this.priceService.save(priceDto);
-
     }
 
     @PostMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")

@@ -14,12 +14,18 @@ import java.time.Instant;
 @Table(name = "prices")
 @IdClass(PriceId.class)
 public class Price {
+
     @Id
     private Long pharmacyId;
+
     @Id
     private Long medicineId;
+
     private BigDecimal price;
+
     private String externalId;
+
     @Column(insertable = false, updatable = false)
     private Instant updatedAt;
+
 }

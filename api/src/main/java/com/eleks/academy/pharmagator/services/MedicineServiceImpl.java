@@ -13,6 +13,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MedicineServiceImpl implements MedicineService {
+
     private final MedicineRepository medicineRepository;
     private final ModelMapper modelMapper;
 
@@ -47,4 +48,5 @@ public class MedicineServiceImpl implements MedicineService {
     public void deleteById(Long id) {
         medicineRepository.deleteById(id);
     }
+
 }

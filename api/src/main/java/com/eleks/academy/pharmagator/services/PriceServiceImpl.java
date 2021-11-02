@@ -42,6 +42,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Optional<Price> update(Long pharmacyId, Long medicineId, PriceDto priceDto) {
+
         PriceId priceId = new PriceId(pharmacyId, medicineId);
 
         return this.priceRepository.findById(priceId)
@@ -59,4 +60,5 @@ public class PriceServiceImpl implements PriceService {
         PriceId priceId = new PriceId(pharmacyId, medicineId);
         priceRepository.deleteById(priceId);
     }
+
 }
