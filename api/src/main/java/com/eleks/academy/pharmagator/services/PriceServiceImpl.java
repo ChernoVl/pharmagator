@@ -36,8 +36,8 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Price save(PriceDto priceDto) {
-        Price p = modelMapper.map(priceDto, Price.class);
-        return priceRepository.save(p);
+        Price price = modelMapper.map(priceDto, Price.class);
+        return priceRepository.save(price);
     }
 
     @Override
@@ -46,11 +46,11 @@ public class PriceServiceImpl implements PriceService {
         PriceId priceId = new PriceId(pharmacyId, medicineId);
 
         return this.priceRepository.findById(priceId)
-                .map(pr -> {
-                    Price p = modelMapper.map(priceDto, Price.class);
-                    p.setPharmacyId(pharmacyId);
-                    p.setMedicineId(medicineId);
-                    return priceRepository.save(p);
+                .map(source -> {
+                    Price price = modelMapper.map(priceDto, Price.class);
+                    price.setPharmacyId(pharmacyId);
+                    price.setMedicineId(medicineId);
+                    return priceRepository.save(price);
                 });
     }
 

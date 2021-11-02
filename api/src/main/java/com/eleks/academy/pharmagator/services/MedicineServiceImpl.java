@@ -37,9 +37,9 @@ public class MedicineServiceImpl implements MedicineService {
     public Optional<Medicine> update(Long id, MedicineDto medicineDto) {
         return medicineRepository.findById(id)
                 .map(source -> {
-                    Medicine m = modelMapper.map(medicineDto, Medicine.class);
-                    m.setId(id);
-                    return medicineRepository.save(m);
+                    Medicine medicine = modelMapper.map(medicineDto, Medicine.class);
+                    medicine.setId(id);
+                    return medicineRepository.save(medicine);
                 });
     }
 

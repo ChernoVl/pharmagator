@@ -29,8 +29,8 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public Pharmacy save(PharmacyDto pharmacyDto) {
-        Pharmacy p = modelMapper.map(pharmacyDto, Pharmacy.class);
-        return pharmacyRepository.save(p);
+        Pharmacy pharmacy = modelMapper.map(pharmacyDto, Pharmacy.class);
+        return pharmacyRepository.save(pharmacy);
     }
 
     @Override
