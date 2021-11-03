@@ -24,15 +24,14 @@ public class PharmacyController {
 
     @GetMapping("/{id:[\\d]+}")
     public ResponseEntity<Pharmacy> getById(@PathVariable Long id) {
+
         return this.pharmacyService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @PostMapping
-    public ResponseEntity<Pharmacy> create(
-            @Valid @RequestBody PharmacyDto pharmacyDto) {
+    public ResponseEntity<Pharmacy> create(@Valid @RequestBody PharmacyDto pharmacyDto) {
         return ResponseEntity.ok(this.pharmacyService.save(pharmacyDto));
     }
 
@@ -44,7 +43,6 @@ public class PharmacyController {
         return this.pharmacyService.update(id, pharmacyDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{id:[\\d]+}")

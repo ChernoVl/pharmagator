@@ -1,7 +1,6 @@
 package com.eleks.academy.pharmagator.controllers;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.input.PriceDto;
-import com.eleks.academy.pharmagator.entities.Medicine;
 import com.eleks.academy.pharmagator.entities.Price;
 import com.eleks.academy.pharmagator.services.PriceService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,7 +22,7 @@ public class PriceController {
         return this.priceService.findAll();
     }
 
-    @GetMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @GetMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<Price> getById(
             @PathVariable Long pharmacyId,
             @PathVariable Long medicineId) {
@@ -37,10 +35,9 @@ public class PriceController {
     @PostMapping
     public Price create(@Valid @RequestBody PriceDto priceDto) {
         return this.priceService.save(priceDto);
-
     }
 
-    @PostMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @PostMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<Price> update(
             @Valid @RequestBody PriceDto priceDto,
             @PathVariable Long pharmacyId,
@@ -51,7 +48,7 @@ public class PriceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{pharmacyId:[\\d]+}/{medicineId:[\\d]+}")
+    @DeleteMapping("/pharmacyId/{pharmacyId:[\\d]+}/medicineId/{medicineId:[\\d]+}")
     public ResponseEntity<?> delete(
             @PathVariable Long pharmacyId,
             @PathVariable Long medicineId) {

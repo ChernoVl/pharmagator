@@ -13,6 +13,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MedicineServiceImpl implements MedicineService {
+
     private final MedicineRepository medicineRepository;
     private final ModelMapper modelMapper;
 
@@ -36,15 +37,14 @@ public class MedicineServiceImpl implements MedicineService {
     public Optional<Medicine> update(Long id, MedicineDto medicineDto) {
         return medicineRepository.findById(id)
                 .map(source -> {
-                    Medicine m = modelMapper.map(medicineDto, Medicine.class);
-                    m.setId(id);
-                    medicineRepository.save(m);
-                    return m;
+                    Medicine medicine = modelMapper.map(medicineDto, Medicine.class);
+                    medicine.setId(id);
+                    return medicineRepository.save(medicine);
                 });
     }
 
-    @Override
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         medicineRepository.deleteById(id);
     }
+
 }

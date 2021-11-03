@@ -7,7 +7,10 @@ import java.math.BigDecimal;
 
 @Data
 public class PriceDto {
+
     @Min(value = 0)
     private BigDecimal price;
+
     private String externalId;
+
 }

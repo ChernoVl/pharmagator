@@ -15,7 +15,6 @@ import java.util.Optional;
 public class PharmacyServiceImpl implements PharmacyService {
 
     private final PharmacyRepository pharmacyRepository;
-
     private final ModelMapper modelMapper;
 
     @Override
@@ -30,18 +29,17 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public Pharmacy save(PharmacyDto pharmacyDto) {
-        Pharmacy p = modelMapper.map(pharmacyDto, Pharmacy.class);
-        return pharmacyRepository.save(p);
+        Pharmacy pharmacy = modelMapper.map(pharmacyDto, Pharmacy.class);
+        return pharmacyRepository.save(pharmacy);
     }
 
     @Override
     public Optional<Pharmacy> update(Long id, PharmacyDto pharmacyDto) {
         return pharmacyRepository.findById(id)
-                .map(ph ->{
+                .map(ph -> {
                     Pharmacy pharmacy = modelMapper.map(pharmacyDto, Pharmacy.class);
                     pharmacy.setId(id);
-                    pharmacyRepository.save(pharmacy);
-                    return pharmacy;
+                    return pharmacyRepository.save(pharmacy);
                 });
     }
 
@@ -49,4 +47,5 @@ public class PharmacyServiceImpl implements PharmacyService {
     public void deleteById(Long id) {
         pharmacyRepository.deleteById(id);
     }
+
 }

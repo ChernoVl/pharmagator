@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MedicineService {
+
     List<Medicine> findAll();
 
     Optional<Medicine> findById(Long id);
@@ -15,5 +16,6 @@ public interface MedicineService {
 
     Optional<Medicine> update(Long id, MedicineDto medicineDto);
 
-    void deleteById(Long id);
+    void delete(Long id);
+
 }
