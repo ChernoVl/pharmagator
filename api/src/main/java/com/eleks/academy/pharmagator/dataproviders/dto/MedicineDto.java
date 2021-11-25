@@ -11,4 +11,5 @@ public class MedicineDto {
     private String title;
     private BigDecimal price;
     private String externalId;
+    private String pharmacyName;
 }

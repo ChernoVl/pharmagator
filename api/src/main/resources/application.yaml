@@ -14,6 +14,8 @@ pharmagator:
       url: https://api-int.apteka-ds.com.ua/api/v1
       category-fetch-url: /category-menu
       category-path: /cat-prods-by-page
+      pharmacy-name: pharmacy-ds
     apteka-ants:
       url: https://anc.ua/productbrowser/v2/ua
       category-fetch-url: /categories
+      pharmacy-name: pharmacy-ants

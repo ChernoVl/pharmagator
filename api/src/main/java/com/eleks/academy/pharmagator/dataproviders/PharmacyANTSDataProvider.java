@@ -27,6 +27,8 @@ public class PharmacyANTSDataProvider implements DataProvider {
     @Value("${pharmagator.data-providers.apteka-ants.category-fetch-url}")
     private String categoriesFetchUrl;
 
+    @Value("${pharmagator.data-providers.apteka-ants.pharmacy-name}")
+    private String pharmacyName;
 
     @Override
     public Stream<MedicineDto> loadData() {
@@ -71,6 +73,7 @@ public class PharmacyANTSDataProvider implements DataProvider {
                 .externalId(dsMedicineDto.getId())
                 .price(dsMedicineDto.getPrice())
                 .title(dsMedicineDto.getName())
+                .pharmacyName(pharmacyName)
                 .build();
     }
 }
