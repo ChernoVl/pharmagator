@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class PriceControllerIT {
+class PriceControllerIT {
 
     private MockMvc mockMvc;
     private DatabaseDataSourceConnection dataSourceConnection;
@@ -46,30 +46,26 @@ public class PriceControllerIT {
     private JdbcTemplate jdbcTemplate;
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "prices", "pharmacies", "medicines");
     }
 
     @Test
-    public void contextLoads() {
-    }
-
-    @Test
-    public void findAllPrices_findIds_ok() throws Exception {
+    void findAllPrices_findIds_ok() throws Exception {
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
             this.mockMvc.perform(MockMvcRequestBuilders.get(URI))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(jsonPath("$[*].externalId",
-                            Matchers.hasItems("2021111201","2021111202")));
+                            Matchers.hasItems("2021111201", "2021111202")));
         } finally {
             this.dataSourceConnection.close();
         }
     }
 
     @Test
-    public void findPriceById_ok() throws Exception {
+    void findPriceById_ok() throws Exception {
         int pharmacyId = 2021111201;
         int medicineId = 2021111201;
         try {
@@ -86,7 +82,7 @@ public class PriceControllerIT {
     }
 
     @Test
-    public void findPriceById_isNotFound() throws Exception {
+    void findPriceById_isNotFound() throws Exception {
         int pharmacyId = 2021110703;
         int medicineId = 2021110703;
         try {

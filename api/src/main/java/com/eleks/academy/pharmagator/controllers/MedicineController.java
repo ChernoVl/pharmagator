@@ -1,6 +1,7 @@
 package com.eleks.academy.pharmagator.controllers;
 
 import com.eleks.academy.pharmagator.dataproviders.dto.input.MedicineDto;
+import com.eleks.academy.pharmagator.exceptions.InvalidIdentifierException;
 import com.eleks.academy.pharmagator.services.MedicineService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/medicines")
@@ -23,14 +23,14 @@ public class MedicineController {
     public List<MedicineDto> getAll() {
         return medicineService.findAll().stream()
                 .map(medicine -> modelMapper.map(medicine, MedicineDto.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{id:[\\d]+}")
     public ResponseEntity<MedicineDto> getById(@PathVariable Long id) {
         return medicineService.findById(id)
                 .map(medicine -> ResponseEntity.ok(modelMapper.map(medicine, MedicineDto.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new InvalidIdentifierException(id));
     }
 
     @PostMapping
@@ -45,12 +45,12 @@ public class MedicineController {
 
         return medicineService.update(id, medicineDto)
                 .map(medicine -> ResponseEntity.ok(modelMapper.map(medicine, MedicineDto.class)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new InvalidIdentifierException(id));
     }
 
     @DeleteMapping("/{id:[\\d]+}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        medicineService.delete(id);
+    public ResponseEntity<MedicineDto> delete(@PathVariable Long id) {
+        medicineService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
