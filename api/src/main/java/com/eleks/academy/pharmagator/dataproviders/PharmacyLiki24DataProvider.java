@@ -35,6 +35,9 @@ public class PharmacyLiki24DataProvider implements DataProvider {
     @Value("${pharmagator.data-providers.apteka-liki24.pharmacy-name}")
     private String pharmacyName;
 
+    @Value("${pharmagator.data-providers.apteka-liki24.page-limit}")
+    private Long pageLimit;
+
     @Override
     public Stream<MedicineDto> loadData() {
         //FIXME delete 2t row and u will see the error
@@ -56,6 +59,9 @@ public class PharmacyLiki24DataProvider implements DataProvider {
             medicinesResponseList.add(liki24MedicinesResponse);
 
             long startFetchPage = initialPageIndex + 1;
+
+            totalPages = totalPages > pageLimit ? pageLimit : totalPages;
+
             LongStream.rangeClosed(startFetchPage, totalPages)
                     .parallel()
                     .forEach(pageNumber -> fillListByMedicineResponse.accept(pageNumber, medicinesResponseList));

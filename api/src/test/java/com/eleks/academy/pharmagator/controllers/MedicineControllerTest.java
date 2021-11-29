@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(controllers = MedicineController.class)
 @Import({MedicineController.class, ModelMapperConfig.class})
-public class MedicineControllerTest {
+class MedicineControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -59,7 +59,7 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void postMappingOfMedicine_medicineIsCreated() throws Exception {
+    void postMappingOfMedicine_medicineIsCreated() throws Exception {
         when(medicineService.save(any(MedicineDto.class))).thenReturn(medicine);
 
         mockMvc.perform(post(URI)
@@ -73,7 +73,7 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void getAllProducts_() throws Exception {
+    void getAllProducts_() throws Exception {
         when(medicineService.findAll()).thenReturn(medicineList);
 
         mockMvc.perform(MockMvcRequestBuilders.get(URI))
@@ -85,18 +85,19 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void DeleteById_ShouldDeleteMedicine() throws Exception {
-        doNothing().when(medicineService).delete(medicine.getId());
+    void DeleteById_ShouldDeleteMedicine() throws Exception {
+
+        doNothing().when(medicineService).deleteById(medicine.getId());
 
         mockMvc.perform(delete(URI + "/" + medicine.getId()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
 
-        verify(medicineService, times(1)).delete(anyLong());
+        verify(medicineService, times(1)).deleteById(anyLong());
     }
 
     @Test
-    public void GetMappingOfMedicine_ShouldReturnRespectiveMedicine() throws Exception {
+    void GetMappingOfMedicine_ShouldReturnRespectiveMedicine() throws Exception {
         when(medicineService.findById(medicine.getId())).thenReturn(Optional.ofNullable(medicine));
 
         mockMvc.perform(get(URI + "/" + medicine.getId()))
@@ -105,7 +106,7 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void putMappingOfMedicine_medicineIsUpdated() throws Exception {
+    void putMappingOfMedicine_medicineIsUpdated() throws Exception {
         when(medicineService.update(anyLong(), any(MedicineDto.class)))
                 .thenReturn(Optional.ofNullable(medicine));
 
@@ -120,7 +121,7 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void findById_testResourceNotFoundException() throws Exception {
+    void findById_testResourceNotFoundException() throws Exception {
         when(medicineService.findById(anyLong())).thenReturn(Optional.empty());
 
         mockMvc.perform(get(URI + "/{id}", 1000L))
@@ -129,7 +130,7 @@ public class MedicineControllerTest {
     }
 
     @Test
-    public void update_testResourceNotFoundException() throws Exception {
+    void update_testResourceNotFoundException() throws Exception {
         when(medicineService.update(anyLong(), any(MedicineDto.class))).thenReturn(Optional.empty());
 
         mockMvc.perform(put(URI + "/{id}", 1000L)

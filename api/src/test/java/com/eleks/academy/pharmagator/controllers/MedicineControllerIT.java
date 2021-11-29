@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class MedicineControllerIT {
+class MedicineControllerIT {
 
     private MockMvc mockMvc;
     private DatabaseDataSourceConnection dataSourceConnection;
@@ -36,8 +36,8 @@ public class MedicineControllerIT {
     private final String URI = "/medicines";
 
     @Autowired
-    public void setComponents(final MockMvc mockMvc,
-                              final DataSource dataSource) throws SQLException {
+    void setComponents(final MockMvc mockMvc,
+                       final DataSource dataSource) throws SQLException {
         this.mockMvc = mockMvc;
         this.dataSourceConnection = new DatabaseDataSourceConnection(dataSource);
     }
@@ -46,12 +46,12 @@ public class MedicineControllerIT {
     private JdbcTemplate jdbcTemplate;
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "medicines");
     }
 
     @Test
-    public void findAllMedicines_findIds_ok() throws Exception {
+    void findAllMedicines_findIds_ok() throws Exception {
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
@@ -65,12 +65,12 @@ public class MedicineControllerIT {
     }
 
     @Test
-    public void findMedicinesById_ok() throws Exception {
+    void findMedicinesById_ok() throws Exception {
         int medicineId = 2021111201;
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.get(URI +"/{id}", medicineId))
+            this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", medicineId))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(jsonPath("title",
                             Matchers.equalToIgnoringCase("MedicineControllerIT_name1")));
@@ -80,12 +80,12 @@ public class MedicineControllerIT {
     }
 
     @Test
-    public void findMedicinesById_notFound() throws Exception {
+    void findMedicinesById_notFound() throws Exception {
         int medicineId = 2021111203;
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.get(URI +"/{id}", medicineId))
+            this.mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", medicineId))
                     .andExpect(MockMvcResultMatchers.status().isNotFound());
         } finally {
             this.dataSourceConnection.close();
@@ -115,7 +115,7 @@ public class MedicineControllerIT {
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.put(URI +"/{id}", medicineId)
+            this.mockMvc.perform(MockMvcRequestBuilders.put(URI + "/{id}", medicineId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"title\": \"new-name\"}"))
                     .andExpect(MockMvcResultMatchers.status().isOk())
@@ -131,7 +131,7 @@ public class MedicineControllerIT {
         try {
             DatabaseOperation.REFRESH.execute(this.dataSourceConnection, readDataset());
 
-            this.mockMvc.perform(MockMvcRequestBuilders.delete(URI +"/{id}", medicineId))
+            this.mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/{id}", medicineId))
                     .andExpect(MockMvcResultMatchers.status().isNoContent());
         } finally {
             this.dataSourceConnection.close();

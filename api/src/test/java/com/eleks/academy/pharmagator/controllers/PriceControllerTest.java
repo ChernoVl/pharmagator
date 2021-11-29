@@ -19,14 +19,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,7 +50,8 @@ class PriceControllerTest {
     private final ModelMapper modelMapper = new ModelMapper();
 
     private final String CONTENT = """ 
-            { "price": 11 , "externalId": "11" }""";
+            { "price": 11 , "externalId": "11" }
+            """;
 
     private static Price price1;
     private static Price price2;
@@ -58,9 +63,12 @@ class PriceControllerTest {
     private static final String EXTERNAL_ID = "11";
     private static final double PRICE = 11;
 
+    private final Long WRONG_PHARMACY_ID = 23L;
+    private final Long WRONG_MEDICINE_ID = 45L;
+
     private final String URI = "/prices";
     private final String URI_PRICE = "/pharmacyId/" + PHARMACY_ID + "/medicineId/" + MEDICINE_ID;
-    private final String URI_NON_EXISTENT_PRICE = "/pharmacyId/" + 23L + "/medicineId/" + 45L;
+    private final String URI_NON_EXISTENT_PRICE = String.format("/pharmacyId/%d/medicineId/%d", WRONG_PHARMACY_ID, WRONG_MEDICINE_ID);
 
     @BeforeAll
     static void setUpComponents() {
@@ -119,12 +127,21 @@ class PriceControllerTest {
     }
 
     @Test
-    void getById_noExistsId_isNotFound() throws Exception {
-        mockMvc.perform(get(URI + URI_NON_EXISTENT_PRICE)).andExpect(status().isNotFound());
+    void getById_noExistsId_NotFound() {
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+            mockMvc.perform(get(URI + URI_NON_EXISTENT_PRICE))
+                    .andExpect(status().isNotFound())
+                    .andDo(print());
+        });
+
+        String expectedMessage = String.format("Invalid Price id: medicine_id: %d; pharmacy_id: %d", WRONG_MEDICINE_ID, WRONG_PHARMACY_ID);
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void updatePharmacyById_isOk() throws Exception {
+    void updatePriceById_isOk() throws Exception {
         when(priceService.update(PHARMACY_ID, MEDICINE_ID, priceDto1)).thenReturn(Optional.of(price1));
         when(modelMapper.map(price1, PriceDto.class)).thenReturn(priceDto1);
 
@@ -138,11 +155,18 @@ class PriceControllerTest {
     }
 
     @Test
-    void updatePharmacyById_noExistsId_NotFound() throws Exception {
-        mockMvc.perform(put(URI + URI_NON_EXISTENT_PRICE)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(CONTENT))
-                .andExpect(status().isNotFound());
+    void updatePriceById_noExistsId_NotFound() throws Exception {
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+            mockMvc.perform(put(URI + URI_NON_EXISTENT_PRICE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(CONTENT))
+                    .andExpect(status().isNotFound());
+        });
+
+        String expectedMessage = String.format("Invalid Price id: medicine_id: %d; pharmacy_id: %d", WRONG_MEDICINE_ID, WRONG_PHARMACY_ID);
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
