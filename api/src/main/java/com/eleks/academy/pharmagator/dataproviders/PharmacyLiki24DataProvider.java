@@ -29,11 +29,14 @@ public class PharmacyLiki24DataProvider implements DataProvider {
     @Qualifier("pharmacyLiki24WebClient")
     private final WebClient webClient;
 
-    @Value("${pharmagator.data-providers.apteka-liki24.initial-page-index}")
+    @Value("${pharmagator.data-providers.pharmacy-liki24.initial-page-index}")
     private Long initialPageIndex;
 
-    @Value("${pharmagator.data-providers.apteka-liki24.pharmacy-name}")
+    @Value("${pharmagator.data-providers.pharmacy-liki24.pharmacy-name}")
     private String pharmacyName;
+
+    @Value("${pharmagator.data-providers.pharmacy-liki24.page-limit}")
+    private Long pageLimit;
 
     @Override
     public Stream<MedicineDto> loadData() {
@@ -56,6 +59,9 @@ public class PharmacyLiki24DataProvider implements DataProvider {
             medicinesResponseList.add(liki24MedicinesResponse);
 
             long startFetchPage = initialPageIndex + 1;
+
+            totalPages = totalPages > pageLimit ? pageLimit : totalPages;
+
             LongStream.rangeClosed(startFetchPage, totalPages)
                     .parallel()
                     .forEach(pageNumber -> fillListByMedicineResponse.accept(pageNumber, medicinesResponseList));
