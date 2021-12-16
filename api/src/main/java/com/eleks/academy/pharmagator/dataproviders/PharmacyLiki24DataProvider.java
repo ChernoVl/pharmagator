@@ -40,9 +40,6 @@ public class PharmacyLiki24DataProvider implements DataProvider {
 
     @Override
     public Stream<MedicineDto> loadData() {
-        //FIXME delete 2t row and u will see the error
-        if (2 == 2)
-            return Stream.of();
 
         BiConsumer<Long, List<Liki24MedicinesResponse>> fillListByMedicineResponse = (page, medicinesResponseList1) -> {
             Liki24MedicinesResponse medicinesResponse = getLiki24MedicinesResponse(page);
