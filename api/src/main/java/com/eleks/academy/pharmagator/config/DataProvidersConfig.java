@@ -80,6 +80,7 @@ public class DataProvidersConfig {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader("x-lang", "uk")
+                .defaultHeader("user-agent", "")
                 .baseUrl(baseUrl)
                 .build();
     }
